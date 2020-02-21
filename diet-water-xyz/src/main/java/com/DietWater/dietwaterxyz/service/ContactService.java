@@ -4,9 +4,12 @@ import com.DietWater.dietwaterxyz.dao.ContactDao;
 import com.DietWater.dietwaterxyz.model.Contact;
 import com.DietWater.dietwaterxyz.view.ContactView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -21,30 +24,69 @@ public class ContactService {
     }
 
 
-    public ContactView saveContact(ContactView contactView){
-        boolean zipCodeValid;
-        try {
-            zipCodeValid = zipcodeService.validZipcode(contactView.getCity(), contactView.getState(), contactView.getZipcode());
-        }catch (IllegalArgumentException e){
-            throw new IllegalArgumentException("ZipCode is not valid");
+    public ContactView saveContact(ContactView contactView) throws IllegalArgumentException, DataIntegrityViolationException{
+        if( zipcodeService.validZipcode(contactView.getCity(), contactView.getState(), contactView.getZipcode())) {
+            Contact contact = Contact.fromContactView(contactView);
+            contact = contactDao.save(contact);
+            contactView.setContactId(contact.getContactId());
+            return contactView;
+        }else{
+            throw new IllegalArgumentException("Invalid ZipCode");
         }
-        Contact contact = Contact.fromContactView(contactView);
-        contactDao.save(contact);
-        contactView.setContactId(contact.getContactId());
-        return contactView;
-
     }
 
     public ContactView updateContact(ContactView contactView){
-        return null;
+        if( zipcodeService.validZipcode(contactView.getCity(), contactView.getState(), contactView.getZipcode())) {
+            Contact contact = Contact.fromContactView(contactView);
+            contactDao.save(contact);
+            return contactView;
+        }else{
+            throw new IllegalArgumentException("Invalid ZipCode");
+        }
     }
 
     public ContactView findContactById(Integer id){
-        return null;
+        Contact contact = contactDao.findById(id).orElse(null);
+        return ContactView.fromContact(contact);
+
     }
 
+
     public List<ContactView> findContacts(String firstName, String lastName, String zipcode){
-        return null;
+        List<ContactView> contactViewList;
+        List<Contact> contactList;
+
+
+        if((firstName!= null && !firstName.isEmpty()) && (lastName!= null && !lastName.isEmpty()) && (zipcode!= null && !zipcode.isEmpty())){
+            contactList = contactDao.findAllByFirstNameAndLastNameAndZipcode(firstName,lastName,zipcode);
+
+        }else if((firstName!= null && !firstName.isEmpty()) && (lastName!= null && !lastName.isEmpty())){
+            contactList = contactDao.findAllByFirstNameAndLastName(firstName,lastName);
+
+        }else if((firstName!= null && !firstName.isEmpty()) && (zipcode!= null && !zipcode.isEmpty())){
+            contactList = contactDao.findAllByFirstNameAndZipcode(firstName,zipcode);
+
+        }else if((lastName!= null && !lastName.isEmpty()) && (zipcode!= null && !zipcode.isEmpty())){
+            contactList = contactDao.findAllByLastNameAndZipcode(lastName,zipcode);
+
+        }else if(firstName!= null && !firstName.isEmpty()){
+            contactList = contactDao.findAllByFirstName(firstName);
+
+        }else if(lastName!= null && !lastName.isEmpty()){
+            contactList = contactDao.findAllByLastName(lastName);
+
+        }else if(zipcode!= null && !zipcode.isEmpty()){
+            contactList = contactDao.findAllByZipcode(zipcode);
+
+        }else {
+            contactList = contactDao.findAll();
+        }
+
+        contactViewList = contactList.stream().map(ContactView::fromContact).collect(Collectors.toList());
+
+        System.out.println(contactViewList);
+
+        return contactViewList;
     }
 
     public void deleteContact(Integer id){

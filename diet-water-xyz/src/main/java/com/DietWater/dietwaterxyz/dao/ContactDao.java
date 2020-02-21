@@ -12,4 +12,9 @@ public interface ContactDao extends JpaRepository<Contact,Integer> {
     List<Contact> findAllByZipcode(String zipcode);
     List<Contact> findAllByFirstName(String firstName);
     List<Contact> findAllByLastName(String lastName);
+    List<Contact> findAllByFirstNameAndLastName(String firstName, String lastName);
+    List<Contact> findAllByFirstNameAndZipcode(String firstName, String zipcode);
+    List<Contact> findAllByLastNameAndZipcode(String lastName, String zipcode);
+    List<Contact> findAllByFirstNameAndLastNameAndZipcode(String firstName, String lastName, String zipcode);
+
 }

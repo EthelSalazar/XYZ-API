@@ -34,7 +34,7 @@ public class ZipcodeServiceTest {
         assertTrue(result);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void shouldReturnFalseForAnInvalidZipCode() {
         //Arrange
         city = "Chicago";
@@ -43,6 +43,9 @@ public class ZipcodeServiceTest {
 
         //Act
         result = zipcodeService.validZipcode(city, state, zipCode);
+
+        //Assert
+        assertFalse(result);
 
     }
 

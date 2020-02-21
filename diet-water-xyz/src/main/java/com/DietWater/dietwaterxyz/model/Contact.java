@@ -3,6 +3,7 @@ package com.DietWater.dietwaterxyz.model;
 import com.DietWater.dietwaterxyz.view.ContactView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,20 +18,31 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer contactId;
+    @Column(nullable = false)
     private String firstName;
+    @Column(nullable = false)
     private String lastName;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String phoneNumber;
+    @Column(nullable = false)
     private String street;
+    @Column(nullable = false)
     private String apt;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private String state;
+    @Column(nullable = false)
     private String country;
+    @Column(nullable = false)
     private String zipcode;
 
     public Contact() { }
 
-    public Contact(String firstName, String lastName, String email, String phoneNumber, String street, String apt, String city, String state, String country, String zipcode) {
+    public Contact(Integer contactId, String firstName, String lastName, String email, String phoneNumber, String street, String apt, String city, String state, String country, String zipcode) {
+        this.setContactId(contactId);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -45,6 +57,7 @@ public class Contact {
 
     public static Contact fromContactView(ContactView contactView) {
         return new Contact(
+                contactView.getContactId(),
                 contactView.getFirstName(),
                 contactView.getLastName(),
                 contactView.getEmail(),

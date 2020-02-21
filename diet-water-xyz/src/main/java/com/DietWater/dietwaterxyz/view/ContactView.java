@@ -20,7 +20,8 @@ public class ContactView {
     public ContactView() {
     }
 
-    public ContactView(String firstName, String lastName, String email, String phoneNumber, String street, String apt, String city, String state, String country, String zipcode) {
+    public ContactView(Integer contactId, String firstName, String lastName, String email, String phoneNumber, String street, String apt, String city, String state, String country, String zipcode) {
+        this.contactId = contactId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -164,6 +165,7 @@ public class ContactView {
 
     public static ContactView fromContact(Contact contact) {
         return new ContactView(
+                contact.getContactId(),
                 contact.getFirstName(),
                 contact.getLastName(),
                 contact.getEmail(),

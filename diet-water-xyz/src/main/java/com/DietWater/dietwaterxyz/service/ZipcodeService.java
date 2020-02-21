@@ -18,23 +18,18 @@ public class ZipcodeService {
     private ZipCodeFeign zipCodeFeign;
 
     public boolean validZipcode(String city, String state, String zipCode){
-        boolean result;
         ZipCodeList zipCodeList;
 
         try{
             zipCodeList = zipCodeFeign.getZipCodeByCityAndState(apiKeyZipcode, apiResponseFormatZipcode,city, state);
-            System.out.println(zipCodeList);
         }catch (Exception e){
-            System.out.println(e.getMessage());
             throw new IllegalArgumentException("API problems please check properties");
         }
 
-        result = zipCodeList.getZip_codes().contains(zipCode);
-
-        if(zipCodeList.getZip_codes().isEmpty() || !result){
-            throw new IllegalArgumentException("Params do not return values");
+        if(zipCodeList.getZip_codes().isEmpty()){
+            throw new IllegalArgumentException("The combination City and State does not return ZipCode values");
         }
 
-        return result;
+        return zipCodeList.getZip_codes().contains(zipCode);
     }
 }
