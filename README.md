@@ -32,5 +32,6 @@ http://localhost:8080/
 http://localhost:8080/
 ```
 ## Test coverage
-![Nombre Image 1](Test Print/Contact Service Unit Test.png)
+You can find the screenshots under **Test Print** folder.
+Current line code coverage: **93%**
 
