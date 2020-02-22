@@ -29,7 +29,6 @@ public class ZipcodeService {
         if(zipCodeList.getZip_codes().isEmpty()){
             throw new IllegalArgumentException("The combination City and State does not return ZipCode values");
         }
-
         return zipCodeList.getZip_codes().contains(zipCode);
     }
 }

@@ -152,7 +152,7 @@ public class ContactServiceTest {
     @Test(expected = NoSuchElementException.class)
     public void shouldReturnNullByFindingWrongId() {
         //Assert
-        assertNull(service.findContactById(2));
+        service.findContactById(2);
     }
 
     @Test

@@ -7,15 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
 
-    ContactDao contactDao;
-    ZipcodeService zipcodeService;
+    private ContactDao contactDao;
+    private ZipcodeService zipcodeService;
 
     @Autowired
     public ContactService(ContactDao dao, ZipcodeService zipcodeService) {
@@ -24,10 +23,14 @@ public class ContactService {
     }
 
 
-    public ContactView saveContact(ContactView contactView) throws IllegalArgumentException, DataIntegrityViolationException{
-        if( zipcodeService.validZipcode(contactView.getCity(), contactView.getState(), contactView.getZipcode())) {
+    public ContactView saveContact(ContactView contactView){
+        if(zipcodeService.validZipcode(contactView.getCity(), contactView.getState(), contactView.getZipcode())) {
             Contact contact = Contact.fromContactView(contactView);
-            contact = contactDao.save(contact);
+            try{
+                contact = contactDao.save(contact);
+            }catch (DataIntegrityViolationException die){
+                throw new DataIntegrityViolationException("Email repeated");
+            }
             contactView.setContactId(contact.getContactId());
             return contactView;
         }else{
@@ -83,8 +86,6 @@ public class ContactService {
         }
 
         contactViewList = contactList.stream().map(ContactView::fromContact).collect(Collectors.toList());
-
-        System.out.println(contactViewList);
 
         return contactViewList;
     }

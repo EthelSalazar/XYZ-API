@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ZipCodeList {
-    List<String> zip_codes = new ArrayList<>();
+    private List<String> zip_codes = new ArrayList<>();
 
     public List<String> getZip_codes() {
         return zip_codes;
