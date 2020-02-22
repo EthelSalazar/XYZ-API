@@ -6,9 +6,11 @@ by Ethel Salazar | cel: (312) 522-1590 | email: salazarethel3010@gmail.com
 
 Under src > main > resources folder edit **application.properties** file, variable:
 ```
-api.key.zipcode = _p5dIK65I5qEQtN28zb8AjckxwzIQYlq4RDL2rrZi94gqBZPUmOpX6mUbJDUkzDIp_
+api.key.zipcode = p5dIK65I5qEQtN28zb8AjckxwzIQYlq4RDL2rrZi94gqBZPUmOpX6mUbJDUkzDIp
 ```
 and provide a fresh API key value before launch and run this project (https://www.zipcodeapi.com/API#zipToLoc)
+
+The same step must be applied in and src > test > resource folder, if run unit tests are required
 
 ## Endpoints
 ### Endpoint Create new Contact
